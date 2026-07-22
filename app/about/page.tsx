@@ -79,9 +79,9 @@ export default function AboutPage() {
             </div>
           </div>
 
-          {/* Personal signature — the mark may appear larger here, at the end. */}
-          <div className="mt-16 flex flex-col items-start gap-3 border-t border-hairline pt-10">
-            <Logo variant="full" />
+          {/* Personal signature — the monogram alone, then the archive line. */}
+          <div className="mt-16 flex flex-col items-start gap-4 border-t border-hairline pt-10">
+            <Logo variant="mark" />
             <Meta>Sina Sherafat — Personal Archive</Meta>
           </div>
         </Container>
