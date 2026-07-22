@@ -4,18 +4,26 @@
   Sina Sherafat — Personal Archive
   Monochrome design system. White → Gray → Black. No accent color.
   Tokens map directly to the approved Design System v1.0.
+
+  Theming: color tokens below reference raw palette variables defined in
+  :root (light) and .dark (dark). Because the theme is declared `inline`,
+  utilities emit `var(--palette-*)`, so switching the .dark class re-themes
+  every component that uses a semantic token — no per-component overrides.
 */
 
+/* Class-based dark mode (driven by next-themes attribute="class"). */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme inline {
-  /* Monochrome palette — every value has a semantic role */
-  --color-canvas: #ffffff;
-  --color-canvas-subtle: #fafaf8;
-  --color-surface: #f4f4f1;
-  --color-hairline: #e1e1dd;
-  --color-muted: #a5a5a0;
-  --color-text-secondary: #666663;
-  --color-text-primary: #191919;
-  --color-ink: #000000;
+  /* Monochrome palette — mapped to themeable raw variables */
+  --color-canvas: var(--canvas);
+  --color-canvas-subtle: var(--canvas-subtle);
+  --color-surface: var(--surface);
+  --color-hairline: var(--hairline);
+  --color-muted: var(--muted);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-primary: var(--text-primary);
+  --color-ink: var(--ink);
 
   /* Semantic aliases used by base elements */
   --color-background: var(--color-canvas);
@@ -85,11 +93,38 @@
 
 :root {
   color-scheme: light;
+
+  /* Light palette — the original Design System v1.0 values */
+  --canvas: #ffffff;
+  --canvas-subtle: #fafaf8;
+  --surface: #f4f4f1;
+  --hairline: #e1e1dd;
+  --muted: #a5a5a0;
+  --text-secondary: #666663;
+  --text-primary: #191919;
+  --ink: #000000;
+}
+
+/*
+  Dark palette — a purpose-built neutral monochrome theme, not an inversion.
+  No blue, no accent, no gradient, no glow. Same quiet editorial feeling.
+*/
+.dark {
+  color-scheme: dark;
+
+  --canvas: #0e0e0e;
+  --canvas-subtle: #121212;
+  --surface: #161616;
+  --hairline: #2a2a2a;
+  --muted: #7a7a7a;
+  --text-secondary: #b8b8b8;
+  --text-primary: #f2f2f2;
+  --ink: #f2f2f2;
 }
 
 @layer base {
   * {
-    border-color: var(--color-hairline);
+    border-color: var(--hairline);
   }
 
   html {
@@ -97,8 +132,8 @@
   }
 
   body {
-    background-color: var(--color-canvas);
-    color: var(--color-text-primary);
+    background-color: var(--canvas);
+    color: var(--text-primary);
     font-family: var(--font-sans);
     font-size: var(--text-body);
     line-height: 1.6;
@@ -108,14 +143,14 @@
 
   /* Visible, quiet focus states for keyboard users */
   :focus-visible {
-    outline: 2px solid var(--color-ink);
+    outline: 2px solid var(--ink);
     outline-offset: 2px;
     border-radius: 2px;
   }
 
   ::selection {
-    background: var(--color-text-primary);
-    color: var(--color-canvas);
+    background: var(--text-primary);
+    color: var(--canvas);
   }
 }
 

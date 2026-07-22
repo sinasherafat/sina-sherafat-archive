@@ -5,6 +5,8 @@ import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { Container } from '@/components/primitives/container'
 import { Logo } from '@/components/mark/logo'
+import { ThemeToggle } from '@/components/theme/theme-toggle'
+import { Meta } from '@/components/primitives/meta'
 import { CloseIcon, MenuIcon } from '@/components/primitives/icons'
 import { navigation } from '@/lib/site'
 import { cn } from '@/lib/utils'
@@ -43,29 +45,35 @@ export function SiteHeader() {
             <Logo variant="wordmark" />
           </Link>
 
-          <nav aria-label="Primary" className="hidden md:block">
-            <ul className="flex items-center gap-6">
-              {navigation.map((item) => {
-                const active = isActive(pathname, item.href)
-                return (
-                  <li key={item.href}>
-                    <Link
-                      href={item.href}
-                      aria-current={active ? 'page' : undefined}
-                      className={cn(
-                        'text-[0.9375rem] transition-colors duration-150',
-                        active
-                          ? 'font-medium text-text-primary underline decoration-text-primary decoration-1 underline-offset-[6px]'
-                          : 'text-text-secondary hover:text-text-primary',
-                      )}
-                    >
-                      {item.label}
-                    </Link>
-                  </li>
-                )
-              })}
-            </ul>
-          </nav>
+          <div className="hidden items-center gap-6 md:flex">
+            <nav aria-label="Primary">
+              <ul className="flex items-center gap-6">
+                {navigation.map((item) => {
+                  const active = isActive(pathname, item.href)
+                  return (
+                    <li key={item.href}>
+                      <Link
+                        href={item.href}
+                        aria-current={active ? 'page' : undefined}
+                        className={cn(
+                          'text-[0.9375rem] transition-colors duration-150',
+                          active
+                            ? 'font-medium text-text-primary underline decoration-text-primary decoration-1 underline-offset-[6px]'
+                            : 'text-text-secondary hover:text-text-primary',
+                        )}
+                      >
+                        {item.label}
+                      </Link>
+                    </li>
+                  )
+                })}
+              </ul>
+            </nav>
+
+            <span aria-hidden="true" className="h-4 w-px bg-hairline" />
+
+            <ThemeToggle />
+          </div>
 
           <button
             type="button"
@@ -113,6 +121,13 @@ export function SiteHeader() {
                 })}
               </ul>
             </nav>
+
+            <div className="border-t border-hairline py-4">
+              <Meta uppercase className="mb-3 block">
+                Theme
+              </Meta>
+              <ThemeToggle className="-ml-2" />
+            </div>
           </Container>
         </div>
       )}
