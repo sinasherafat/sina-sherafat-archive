@@ -64,7 +64,12 @@ export function SiteFooter() {
 
         <div className="flex items-center justify-between border-t border-hairline py-6">
           <Meta>© {year} {siteConfig.name}</Meta>
-          <Meta>Personal Archive</Meta>
+          <Meta className="inline-flex items-baseline gap-2 whitespace-nowrap text-right">
+            <span className="font-medium text-text-primary">
+              Personal Archive
+            </span>
+            <span>{siteConfig.version}</span>
+          </Meta>
         </div>
       </Container>
     </footer>

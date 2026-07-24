@@ -4,6 +4,7 @@
  */
 export const siteConfig = {
   name: 'Sina Sherafat',
+  version: 'v1.1',
   url: 'https://sinasherafat.com',
   twitter: '@sinasherafat',
   description:
