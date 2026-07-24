@@ -65,10 +65,10 @@ export function SiteFooter() {
         <div className="flex items-center justify-between border-t border-hairline py-6">
           <Meta>© {year} {siteConfig.name}</Meta>
           <Meta className="inline-flex items-baseline gap-2 whitespace-nowrap text-right">
-            <span className="font-medium text-text-primary">
-              Personal Archive
+            <span>Personal Archive</span>
+            <span className="tracking-normal opacity-90">
+              {siteConfig.version}
             </span>
-            <span>{siteConfig.version}</span>
           </Meta>
         </div>
       </Container>
