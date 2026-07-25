@@ -5,7 +5,8 @@ import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { Container } from '@/components/primitives/container'
 import { Logo } from '@/components/mark/logo'
-import { ThemeToggle } from '@/components/theme/theme-toggle'
+import { ThemeControl } from '@/components/theme/theme-control'
+import { ThemeMenu } from '@/components/theme/theme-menu'
 import { Meta } from '@/components/primitives/meta'
 import { CloseIcon, MenuIcon } from '@/components/primitives/icons'
 import { navigation } from '@/lib/site'
@@ -72,7 +73,7 @@ export function SiteHeader() {
 
             <span aria-hidden="true" className="h-4 w-px bg-hairline" />
 
-            <ThemeToggle />
+            <ThemeMenu />
           </div>
 
           <button
@@ -122,11 +123,11 @@ export function SiteHeader() {
               </ul>
             </nav>
 
-            <div className="border-t border-hairline py-4">
-              <Meta uppercase className="mb-3 block">
+            <div className="border-t border-hairline py-5">
+              <Meta uppercase className="mb-4 block">
                 Theme
               </Meta>
-              <ThemeToggle className="-ml-2" />
+              <ThemeControl />
             </div>
           </Container>
         </div>
