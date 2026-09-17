@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Meta } from '@/components/primitives/meta'
 import {
   appendSelectionHistory,
@@ -9,6 +9,7 @@ import {
   sanitizeSelectionHistory,
 } from '@/lib/editorial/selection'
 import type { Perspective, SelectionHistory } from '@/lib/editorial/types'
+import { cn } from '@/lib/utils'
 
 const SESSION_HISTORY_KEY = 'technology-editorial-engine:history:v1'
 const SESSION_ID_KEY = 'technology-editorial-engine:session-id:v1'
@@ -42,11 +43,20 @@ function delay(milliseconds: number): Promise<void> {
   return new Promise((resolve) => window.setTimeout(resolve, milliseconds))
 }
 
-function SourceDetails({ perspective }: { perspective: Perspective }) {
+function SourceDetails({
+  perspective,
+  compact = false,
+}: {
+  perspective: Perspective
+  compact?: boolean
+}) {
   return (
     <details
       key={perspective.id}
-      className="group mt-5 border-t border-hairline pt-4"
+      className={cn(
+        'group mt-5',
+        compact ? '' : 'border-t border-hairline pt-4',
+      )}
     >
       <summary className="w-fit cursor-pointer list-none rounded-sm text-small text-text-secondary underline decoration-hairline underline-offset-4 transition-colors hover:text-text-primary group-open:text-text-primary">
         Sources
@@ -80,10 +90,12 @@ function SourceDetails({ perspective }: { perspective: Perspective }) {
                   {sourceContent}
                 </Link>
               )}
-              <span className="mt-1 block font-mono text-meta uppercase tracking-[0.04em]">
-                Tier {source.sourceTier} /{' '}
-                {source.fixture ? 'Synthetic fixture' : 'Source record'}
-              </span>
+              {compact ? null : (
+                <span className="mt-1 block font-mono text-meta uppercase tracking-[0.04em]">
+                  Tier {source.sourceTier} /{' '}
+                  {source.fixture ? 'Synthetic fixture' : 'Source record'}
+                </span>
+              )}
             </div>
           )
         })}
@@ -101,9 +113,13 @@ function SourceDetails({ perspective }: { perspective: Perspective }) {
 export function EditorialReader({
   initialPerspective,
   updateStableUrl = false,
+  avoidInitialRepeat = true,
+  variant = 'full',
 }: {
   initialPerspective: Perspective
   updateStableUrl?: boolean
+  avoidInitialRepeat?: boolean
+  variant?: 'full' | 'compact'
 }) {
   const [perspective, setPerspective] = useState(initialPerspective)
   const [phase, setPhase] = useState<TransitionPhase>('idle')
@@ -112,17 +128,10 @@ export function EditorialReader({
   const [error, setError] = useState<string | null>(null)
   const historyRef = useRef<SelectionHistory>(emptySelectionHistory)
   const requestRef = useRef(false)
+  const initializedPerspectiveRef = useRef<string | null>(null)
+  const compact = variant === 'compact'
 
-  useEffect(() => {
-    const history = appendSelectionHistory(
-      readSessionHistory(),
-      initialPerspective,
-    )
-    historyRef.current = history
-    writeSessionHistory(history)
-  }, [initialPerspective])
-
-  async function showAnotherPerspective() {
+  const showAnotherPerspective = useCallback(async (updateUrl = true) => {
     if (requestRef.current) return
     requestRef.current = true
     setPending(true)
@@ -152,7 +161,7 @@ export function EditorialReader({
       historyRef.current = history
       writeSessionHistory(history)
 
-      if (updateStableUrl) {
+      if (updateUrl && updateStableUrl) {
         window.history.replaceState(
           null,
           '',
@@ -173,65 +182,114 @@ export function EditorialReader({
       setPending(false)
       requestRef.current = false
     }
-  }
+  }, [updateStableUrl])
+
+  useEffect(() => {
+    if (initializedPerspectiveRef.current === initialPerspective.id) return
+
+    const history = readSessionHistory()
+    historyRef.current = history
+    const mostRecentPerspective = history.perspectiveIds.at(-1)
+
+    if (avoidInitialRepeat && mostRecentPerspective === initialPerspective.id) {
+      const timer = window.setTimeout(() => {
+        initializedPerspectiveRef.current = initialPerspective.id
+        void showAnotherPerspective(false)
+      }, 0)
+      return () => window.clearTimeout(timer)
+    }
+
+    initializedPerspectiveRef.current = initialPerspective.id
+    const nextHistory = appendSelectionHistory(history, initialPerspective)
+    historyRef.current = nextHistory
+    writeSessionHistory(nextHistory)
+  }, [avoidInitialRepeat, initialPerspective, showAnotherPerspective])
 
   return (
-    <section className="mx-auto flex w-full max-w-reading flex-col px-5 py-16 sm:px-8 md:py-24">
+    <section
+      aria-label={compact ? 'Technology Editorial Engine' : undefined}
+      className={cn(
+        'flex w-full max-w-reading flex-col',
+        compact ? '' : 'mx-auto px-5 py-16 sm:px-8 md:py-24',
+      )}
+    >
       <article
         className="perspective-copy"
         data-phase={phase}
         aria-busy={busy}
       >
-        <Meta uppercase className="block">
-          {perspective.displayDate} / {perspective.category}
-        </Meta>
+        {compact ? null : (
+          <Meta uppercase className="block">
+            {perspective.displayDate} / {perspective.category}
+          </Meta>
+        )}
 
-        <h1 className="mt-8 text-[clamp(2rem,4.2vw,3.7rem)] font-medium leading-[1.08] tracking-[-0.04em] text-balance text-text-primary">
-          {perspective.body}
-        </h1>
+        {compact ? (
+          <p className="text-[1.05rem] leading-[1.55] tracking-[-0.01em] text-pretty text-text-primary">
+            {perspective.body}
+          </p>
+        ) : (
+          <h1 className="mt-8 text-[1.05rem] font-normal leading-[1.55] tracking-[-0.01em] text-pretty text-text-primary">
+            {perspective.body}
+          </h1>
+        )}
 
-        <p className="mt-7 font-mono text-meta uppercase leading-relaxed tracking-[0.04em] text-text-secondary">
-          {perspective.sourceLine}
-        </p>
+        {compact ? null : (
+          <p className="mt-7 font-mono text-meta uppercase leading-relaxed tracking-[0.04em] text-text-secondary">
+            {perspective.sourceLine}
+          </p>
+        )}
 
-        <SourceDetails perspective={perspective} />
+        <SourceDetails perspective={perspective} compact={compact} />
       </article>
 
-      <div className="mt-12 border-t border-hairline pt-7 sm:mt-16">
+      <div
+        className={cn(
+          'border-t border-hairline',
+          compact ? 'mt-8 pt-6' : 'mt-12 pt-7 sm:mt-16',
+        )}
+      >
         <button
           type="button"
-          onClick={showAnotherPerspective}
+          onClick={() => void showAnotherPerspective()}
           disabled={pending}
           className="group min-h-11 rounded-sm text-left text-[1.05rem] font-medium text-text-primary underline decoration-hairline underline-offset-[7px] transition-colors duration-150 hover:decoration-text-primary disabled:cursor-wait disabled:text-text-secondary"
         >
           <span>Another perspective →</span>
-          {busy ? (
+          {busy && !compact ? (
             <span className="ml-2 font-mono text-meta uppercase tracking-[0.04em] text-text-secondary">
               Working
             </span>
           ) : null}
         </button>
 
-        <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-small text-text-secondary">
-          <Link
-            href={`/perspectives/${perspective.slug}`}
-            className="rounded-sm underline decoration-hairline underline-offset-4 hover:text-text-primary"
-          >
-            Stable link
-          </Link>
-          <Link
-            href="/te-engine/about"
-            className="rounded-sm underline decoration-hairline underline-offset-4 hover:text-text-primary"
-          >
-            About
-          </Link>
-        </div>
+        {compact ? null : (
+          <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-small text-text-secondary">
+            <Link
+              href={`/perspectives/${perspective.slug}`}
+              className="rounded-sm underline decoration-hairline underline-offset-4 hover:text-text-primary"
+            >
+              Stable link
+            </Link>
+            <Link
+              href="/te-engine/about"
+              className="rounded-sm underline decoration-hairline underline-offset-4 hover:text-text-primary"
+            >
+              About
+            </Link>
+          </div>
+        )}
 
-        {error ? (
+        {error && !compact ? (
           <p
             className="mt-4 max-w-reading text-small text-text-secondary"
             role="status"
           >
+            {error}
+          </p>
+        ) : null}
+        {error && compact ? (
+          <p className="sr-only" role="status">
             {error}
           </p>
         ) : null}
