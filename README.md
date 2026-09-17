@@ -44,5 +44,8 @@ protected Vercel cron route runs the narrow editorial stages and stores both
 approved and rejected outcomes for audit. The reader never invokes generation
 synchronously.
 
+The checked-in schedule runs daily so it can deploy on Vercel Hobby. Change it
+to `17 * * * *` on Pro for the intended hourly intake cadence.
+
 See [the architecture](docs/architecture.md) and
 [fixture policy](docs/editorial-fixtures.md) for operational details.

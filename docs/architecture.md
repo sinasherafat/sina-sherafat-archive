@@ -41,10 +41,12 @@ storage.
 
 ## Operations
 
-Vercel calls `/api/jobs/editorial` hourly. The endpoint requires `CRON_SECRET`
-and remains a no-op unless `ENABLE_LIVE_INGESTION=true`. When enabled, it also
-requires Postgres storage and a model credential, runs each typed stage through
-the hard publish gate, and persists approved or rejected results for audit.
+Vercel calls `/api/jobs/editorial` daily on the current Hobby-compatible
+schedule. On a Pro project, change the expression to `17 * * * *` for the
+intended hourly cadence. The endpoint requires `CRON_SECRET` and remains a no-op
+unless `ENABLE_LIVE_INGESTION=true`. When enabled, it also requires Postgres
+storage and a model credential, runs each typed stage through the hard publish
+gate, and persists approved or rejected results for audit.
 Structured logs cover ingest freshness, pool size, generation decisions,
 calculation failures, corrections, repetition, and selection latency without
 user profiling.
