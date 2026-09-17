@@ -5,8 +5,10 @@ import { Section } from '@/components/primitives/section'
 import { Meta } from '@/components/primitives/meta'
 import { ArchiveLink } from '@/components/primitives/archive-link'
 import { ArrowRightIcon } from '@/components/primitives/icons'
+import { EditorialReader } from '@/components/editorial/editorial-reader'
 import { ProjectRow } from '@/components/work/project-row'
 import { getFeaturedProjects, getLatestNote } from '@/lib/content'
+import { getInitialFixturePerspective } from '@/lib/editorial/fixtures'
 import { formatDate } from '@/lib/format'
 import { siteConfig } from '@/lib/site'
 
@@ -32,6 +34,15 @@ export default function HomePage() {
           </p>
         </div>
       </Container>
+
+      <Section spacing="compact">
+        <Container width="shell">
+          <EditorialReader
+            initialPerspective={getInitialFixturePerspective()}
+            variant="compact"
+          />
+        </Container>
+      </Section>
 
       {/* Selected work */}
       <Section spacing="wide">

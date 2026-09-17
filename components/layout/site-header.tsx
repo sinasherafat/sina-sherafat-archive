@@ -13,17 +13,15 @@ import { cn } from '@/lib/utils'
 
 function isActive(pathname: string, href: string): boolean {
   if (href === '/') return pathname === '/'
+  if (href === '/te-engine') {
+    return pathname.startsWith('/te-engine') || pathname.startsWith('/perspectives')
+  }
   return pathname === href || pathname.startsWith(`${href}/`)
 }
 
 export function SiteHeader() {
   const pathname = usePathname()
   const [menuOpen, setMenuOpen] = useState(false)
-
-  // Close the mobile sheet whenever the route changes.
-  useEffect(() => {
-    setMenuOpen(false)
-  }, [pathname])
 
   // Prevent body scroll while the mobile sheet is open.
   useEffect(() => {
@@ -106,6 +104,7 @@ export function SiteHeader() {
                     <li key={item.href}>
                       <Link
                         href={item.href}
+                        onClick={() => setMenuOpen(false)}
                         aria-current={active ? 'page' : undefined}
                         className={cn(
                           'flex min-h-11 items-center text-h3',

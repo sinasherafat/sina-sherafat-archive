@@ -1,33 +1,55 @@
-# sina-sherafat-archive
+# Sina Sherafat Personal Archive
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [v0](https://v0.app).
+A quiet archive of selected work, notes, and editorial instruments. The
+Technology Editorial Engine lives inside the Archive at `/te-engine`; it turns
+source-backed technology events into human-scale observations without replacing
+the parent site shell.
 
-## Built with v0
+This repository remains linked to its [v0 project](https://v0.app/chat/projects/prj_MVmoUSyQoKr0bKs5G1X5iA8SZfYy).
 
-This repository is linked to a [v0](https://v0.app) project. You can continue developing by visiting the link below -- start new chats to make changes, and v0 will push commits directly to this repo. Every merge to `main` will automatically deploy.
-
-[Continue working on v0 →](https://v0.app/chat/projects/prj_MVmoUSyQoKr0bKs5G1X5iA8SZfYy)
-
-## Getting Started
-
-First, run the development server:
+## Local development
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The TE Engine defaults to a reviewed fixture inventory: 36 perspectives across
+12 synthetic events. No model or database is required to test the reader.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Validation
 
-## Learn More
+```bash
+pnpm typecheck
+pnpm lint
+pnpm test
+pnpm db:validate
+pnpm build
+```
 
-To learn more, take a look at the following resources:
+## Durable storage
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-- [v0 Documentation](https://v0.app/docs) - learn about v0 and how to use it.
+Copy `.env.example`, configure `DATABASE_URL`, and explicitly select Postgres:
+
+```bash
+EDITORIAL_STORAGE=postgres pnpm db:migrate
+EDITORIAL_STORAGE=postgres pnpm db:seed
+```
+
+The migration includes the full provenance model. Fixture mode remains the safe
+fallback when storage is unavailable.
+
+## Live intake
+
+Live generation is intentionally opt-in. Configure `CRON_SECRET`,
+`OPENAI_API_KEY`, `OPENAI_MODEL`, `DATABASE_URL`, and
+`EDITORIAL_STORAGE=postgres`, then set `ENABLE_LIVE_INGESTION=true`. The
+protected Vercel cron route runs the narrow editorial stages and stores both
+approved and rejected outcomes for audit. The reader never invokes generation
+synchronously.
+
+The checked-in schedule runs daily so it can deploy on Vercel Hobby. Change it
+to `17 * * * *` on Pro for the intended hourly intake cadence.
+
+See [the architecture](docs/architecture.md) and
+[fixture policy](docs/editorial-fixtures.md) for operational details.
