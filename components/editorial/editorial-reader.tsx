@@ -176,7 +176,7 @@ export function EditorialReader({
   }
 
   return (
-    <section className="mx-auto flex min-h-[calc(100svh-8rem)] w-full max-w-reading flex-col justify-center px-5 py-16 sm:px-8 md:py-24">
+    <section className="mx-auto flex w-full max-w-reading flex-col px-5 py-16 sm:px-8 md:py-24">
       <article
         className="perspective-copy"
         data-phase={phase}
@@ -186,7 +186,7 @@ export function EditorialReader({
           {perspective.displayDate} / {perspective.category}
         </Meta>
 
-        <h1 className="mt-7 text-[clamp(1.65rem,3.2vw,2.35rem)] font-medium leading-[1.12] tracking-[-0.035em] text-balance text-text-primary">
+        <h1 className="mt-8 text-[clamp(2rem,4.2vw,3.7rem)] font-medium leading-[1.08] tracking-[-0.04em] text-balance text-text-primary">
           {perspective.body}
         </h1>
 
@@ -220,7 +220,7 @@ export function EditorialReader({
             Stable link
           </Link>
           <Link
-            href="/about"
+            href="/te-engine/about"
             className="rounded-sm underline decoration-hairline underline-offset-4 hover:text-text-primary"
           >
             About

@@ -2,21 +2,22 @@
  * Site-wide configuration and canonical copy.
  * Editorial constants live here so pages stay free of scattered strings.
  */
-const vercelHost =
-  process.env.VERCEL_PROJECT_PRODUCTION_URL ?? process.env.VERCEL_URL
-
 export const siteConfig = {
-  name: 'Technology Editorial Engine',
-  shortName: 'Editorial Engine',
-  version: 'v0.1',
-  url:
-    process.env.NEXT_PUBLIC_SITE_URL ??
-    (vercelHost ? `https://${vercelHost}` : 'http://localhost:3000'),
+  name: 'Sina Sherafat',
+  version: 'v1.1',
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? 'https://sinasherafat.com',
+  twitter: '@sinasherafat',
   description:
-    'A small editorial instrument that turns source-backed technology events into human-scale observations.',
-  principle: 'Truth → Perspective → Absurdity',
+    'A quiet personal archive of selected work, ideas, and things still becoming.',
+  intro:
+    'Selected work, ideas, and things still becoming.',
+  location: 'Working across product, systems, and narrative.',
+  email: 'hello@sinasherafat.com',
 } as const
 
 export const navigation = [
+  { label: 'Work', href: '/work' },
+  { label: 'Notes', href: '/notes' },
+  { label: 'TE Engine', href: '/te-engine' },
   { label: 'About', href: '/about' },
 ] as const

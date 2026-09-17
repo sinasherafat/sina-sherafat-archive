@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { PageShell } from '@/components/layout/page-shell'
-import { EditorialReader } from '@/components/editorial/editorial-reader'
+import { EditorialPage } from '@/components/editorial/editorial-page'
 import {
   fixturePerspectives,
   getFixturePerspective,
@@ -39,9 +38,5 @@ export default async function PerspectivePage({ params }: PageProps) {
   const perspective = await repository.getPerspective(slug)
   if (!perspective) notFound()
 
-  return (
-    <PageShell>
-      <EditorialReader initialPerspective={perspective} updateStableUrl />
-    </PageShell>
-  )
+  return <EditorialPage initialPerspective={perspective} updateStableUrl />
 }

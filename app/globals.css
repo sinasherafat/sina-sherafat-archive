@@ -1,8 +1,8 @@
 @import 'tailwindcss';
 
 /*
-  Technology Editorial Engine
-  Monochrome design system. White → Gray → Black. No accent color.
+  Sina Sherafat — Personal Archive
+  Monochrome design system. White → Gray → Black, with one structural blue.
   Tokens map directly to the approved Design System v1.0.
 
   Theming: color tokens below reference raw palette variables defined in
@@ -24,6 +24,7 @@
   --color-text-secondary: var(--text-secondary);
   --color-text-primary: var(--text-primary);
   --color-ink: var(--ink);
+  --color-archive-blue: var(--archive-blue);
 
   /* Semantic aliases used by base elements */
   --color-background: var(--color-canvas);
@@ -103,11 +104,12 @@
   --text-secondary: #666663;
   --text-primary: #191919;
   --ink: #000000;
+  --archive-blue: #143cff;
 }
 
 /*
   Dark palette — a purpose-built neutral monochrome theme, not an inversion.
-  No blue, no accent, no gradient, no glow. Same quiet editorial feeling.
+  No additional accent, gradient, or glow. Same quiet editorial feeling.
 */
 .dark {
   color-scheme: dark;
@@ -120,6 +122,7 @@
   --text-secondary: #b8b8b8;
   --text-primary: #f2f2f2;
   --ink: #f2f2f2;
+  --archive-blue: #143cff;
 }
 
 @layer base {
@@ -179,7 +182,7 @@
 }
 
 .archive-enter {
-  animation: archive-fade-in 220ms var(--ease-standard) both;
+  animation: archive-fade-in 360ms var(--ease-standard) both;
 }
 
 @keyframes perspective-in {

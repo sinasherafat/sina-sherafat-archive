@@ -1,70 +1,91 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import { PageShell } from '@/components/layout/page-shell'
+import { PageHeader } from '@/components/layout/page-header'
 import { Container } from '@/components/primitives/container'
+import { Section } from '@/components/primitives/section'
 import { Meta } from '@/components/primitives/meta'
+import { Divider } from '@/components/primitives/divider'
+import { ArchiveLink } from '@/components/primitives/archive-link'
+import { Logo } from '@/components/mark/logo'
+import { siteConfig } from '@/lib/site'
 
 export const metadata: Metadata = {
   title: 'About',
   description:
-    'How the Technology Editorial Engine turns source-backed events into restrained, human-scale observations.',
+    'A concise introduction to Sina Sherafat — recurring areas of work and a direct way to make contact.',
   alternates: { canonical: '/about' },
 }
+
+const paragraphs = [
+  'Sina Sherafat works across product, systems, and narrative. The projects differ in category but share recurring concerns: memory, intelligence, incentives, identity, and long-term value.',
+  'This archive exists to give that work a durable public context — what each project is trying to understand, what the contribution was, and where it currently stands. It favours honest context over momentum, and continuity over volume.',
+  'The intention is that the parts cohere over time. A visitor should gradually recognise the same standards and methods across otherwise different projects.',
+]
+
+const areas = [
+  'Product and interface design',
+  'Systems and coordination',
+  'AI and narrative tools',
+  'Long-term ventures',
+]
 
 export default function AboutPage() {
   return (
     <PageShell>
-      <Container width="reading" className="py-20 md:py-32">
-        <Meta uppercase className="block">
-          About / v0.1
-        </Meta>
-        <h1 className="mt-6 text-h1 font-medium text-balance text-text-primary">
-          Turn abstract technology into something a human can feel.
-        </h1>
+      <PageHeader
+        eyebrow="About"
+        title="A person behind the work"
+        width="reading"
+        intro="Enough to establish identity and perspective, and a direct route to make contact. No exhaustive résumé."
+      />
 
-        <div className="mt-10 space-y-6 text-body-lg text-text-primary text-pretty">
-          <p>
-            The Technology Editorial Engine transforms source-backed technology
-            events into short observations. It does not replace journalism. It
-            preserves sources, separates claims from interpretation, and treats
-            accuracy as more important than cleverness.
-          </p>
-          <p>
-            The editorial pipeline may use AI to normalize events, verify claims,
-            propose perspectives, and draft language. Calculation happens in
-            deterministic code, not model memory. Every publishable observation
-            must pass a provenance, attribution, voice, sensitivity, and length
-            gate before entering the reader pool.
-          </p>
-          <p>
-            The reader never waits for live generation. “Another perspective →”
-            samples only from a pre-generated, approved inventory with session
-            rules that limit repeated observations, events, and lenses.
-          </p>
-        </div>
+      <Section>
+        <Container width="reading">
+          <div className="flex flex-col gap-6">
+            {paragraphs.map((text) => (
+              <p key={text} className="text-body text-text-primary text-pretty">
+                {text}
+              </p>
+            ))}
+          </div>
 
-        <section id="fixtures" className="mt-16 border-t border-hairline pt-10">
-          <Meta as="h2" uppercase className="block">
-            Preview data
-          </Meta>
-          <p className="mt-5 text-body text-text-secondary text-pretty">
-            This Preview uses 36 reviewed perspectives across 12 synthetic events
-            adapted from the canonical specification. They are specimens for
-            testing interaction, voice, provenance, and diversity. They are not
-            current news and are labeled accordingly. Live ingestion remains
-            opt-in until a database and model credentials are configured.
-          </p>
-        </section>
+          <Divider className="my-12" />
 
-        <div className="mt-12">
-          <Link
-            href="/"
-            className="rounded-sm text-body font-medium text-text-primary underline decoration-hairline underline-offset-[6px] hover:decoration-text-primary"
-          >
-            Return to the reader →
-          </Link>
-        </div>
-      </Container>
+          <div className="flex flex-col gap-8 sm:flex-row sm:justify-between">
+            <div>
+              <Meta uppercase className="mb-4 block">
+                Recurring areas
+              </Meta>
+              <ul className="flex flex-col gap-2">
+                {areas.map((area) => (
+                  <li key={area} className="text-body text-text-primary">
+                    {area}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div>
+              <Meta uppercase className="mb-4 block">
+                Contact
+              </Meta>
+              <ul className="flex flex-col gap-2 text-body">
+                <li>
+                  <ArchiveLink href={`mailto:${siteConfig.email}`}>
+                    {siteConfig.email}
+                  </ArchiveLink>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Personal signature — the monogram alone, then the archive line. */}
+          <div className="mt-16 flex flex-col items-start gap-4 border-t border-hairline pt-10">
+            <Logo variant="mark" />
+            <Meta>Sina Sherafat — Personal Archive</Meta>
+          </div>
+        </Container>
+      </Section>
     </PageShell>
   )
 }

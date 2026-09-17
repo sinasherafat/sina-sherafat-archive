@@ -1,5 +1,9 @@
 # Technology Editorial Engine v0.1
 
+The engine is a feature inside the Sina Sherafat Personal Archive. Its reader,
+stable perspective routes, and About page reuse the Archive's global logo,
+header, navigation, theme system, typography, footer, and responsive shell.
+
 ## Reader path
 
 The reader receives only `approved` or `active` perspectives. The initial page

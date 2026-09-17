@@ -11,7 +11,7 @@ const SPEC_DATE = '2026-09-17T00:00:00.000Z'
 
 export const fixtureSource: SourceRecord = {
   id: 'src-spec-fixtures',
-  url: '/about#fixtures',
+  url: '/te-engine/about#fixtures',
   title: 'Synthetic voice examples and editorial fixtures',
   publisher: 'Technology Editorial Engine specification',
   publishedAt: SPEC_DATE,

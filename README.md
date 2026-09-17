@@ -1,7 +1,11 @@
-# Technology Editorial Engine
+# Sina Sherafat Personal Archive
 
-A quiet editorial instrument that turns source-backed technology events into
-human-scale observations.
+A quiet archive of selected work, notes, and editorial instruments. The
+Technology Editorial Engine lives inside the Archive at `/te-engine`; it turns
+source-backed technology events into human-scale observations without replacing
+the parent site shell.
+
+This repository remains linked to its [v0 project](https://v0.app/chat/projects/prj_MVmoUSyQoKr0bKs5G1X5iA8SZfYy).
 
 ## Local development
 
@@ -10,8 +14,8 @@ pnpm install
 pnpm dev
 ```
 
-The application defaults to a reviewed fixture inventory: 36 perspectives
-across 12 synthetic events. No model or database is required to test the reader.
+The TE Engine defaults to a reviewed fixture inventory: 36 perspectives across
+12 synthetic events. No model or database is required to test the reader.
 
 ## Validation
 
