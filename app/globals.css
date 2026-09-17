@@ -1,7 +1,7 @@
 @import 'tailwindcss';
 
 /*
-  Sina Sherafat — Personal Archive
+  Technology Editorial Engine
   Monochrome design system. White → Gray → Black. No accent color.
   Tokens map directly to the approved Design System v1.0.
 
@@ -179,5 +179,31 @@
 }
 
 .archive-enter {
-  animation: archive-fade-in 360ms var(--ease-standard) both;
+  animation: archive-fade-in 220ms var(--ease-standard) both;
+}
+
+@keyframes perspective-in {
+  from {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.perspective-copy {
+  transition:
+    opacity 170ms var(--ease-standard),
+    transform 170ms var(--ease-standard);
+}
+
+.perspective-copy[data-phase='out'] {
+  opacity: 0;
+  transform: translateY(-3px);
+}
+
+.perspective-copy[data-phase='in'] {
+  animation: perspective-in 190ms var(--ease-standard) both;
 }
